@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DoiWebCodeFormaAlienacaoAquisicaoSeeder::class);
         $this->command->info('DoiWebCodeFormaAlienacaoAquisicaoSeeder loaded!');
+		
+		$this->call(DOICodeTipoSituacaoSeeder::class);
+        $this->command->info('DOICodeTipoSituacaoSeeder loaded!');
     }
 }
