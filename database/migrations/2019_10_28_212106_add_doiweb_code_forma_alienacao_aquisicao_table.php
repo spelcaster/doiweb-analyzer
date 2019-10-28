@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDoiwebCodeAreaImovelTable extends Migration
+class AddDoiwebCodeFormaAlienacaoAquisicaoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddDoiwebCodeAreaImovelTable extends Migration
      */
     public function up()
     {
-        Schema::create('doiweb_code_area_imovel', function (Blueprint $table) {
+        Schema::create('doiweb_code_forma_alienacao_aquisicao', function (Blueprint $table) {
             $table->uuid('id')
-                  ->index();
+                ->index();
             $table->unsignedInteger('code');
             $table->string('value');
             $table->softDeletes();
@@ -30,7 +30,7 @@ class AddDoiwebCodeAreaImovelTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('doiweb_code_area_imovel');
+        Schema::dropIfExists('doiweb_code_forma_alienacao_aquisicao');
         Schema::enableForeignKeyConstraints();
     }
 }
