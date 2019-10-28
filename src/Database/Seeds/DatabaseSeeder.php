@@ -24,5 +24,11 @@ class DatabaseSeeder extends Seeder
 		
 		$this->call(DOICodeTipoSituacaoSeeder::class);
         $this->command->info('DOICodeTipoSituacaoSeeder loaded!');
+		
+		$this->call(DOICodeTipoRetificacaoSeeder::class);
+        $this->command->info('DOICodeTipoRetificacaoSeeder loaded!');
+		
+		$this->call(DOICodeValorAlienacaoSeeder::class);
+        $this->command->info('DOICodeValorAlienacaoSeeder loaded!');
     }
 }
