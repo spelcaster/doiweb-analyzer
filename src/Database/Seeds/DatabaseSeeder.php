@@ -30,5 +30,8 @@ class DatabaseSeeder extends Seeder
 		
 		$this->call(DOICodeValorAlienacaoSeeder::class);
         $this->command->info('DOICodeValorAlienacaoSeeder loaded!');
+		
+		$this->call(DOICodeValorItbiItcdSeeder::class);
+        $this->command->info('DOICodeValorItbiItcdSeeder loaded!');
     }
 }
