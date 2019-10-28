@@ -13,5 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(DOICodeTipoTransacaoSeeder::class);
+        $this->command->info('DOICodeTipoTransacaoSeeder loaded!');
     }
 }
