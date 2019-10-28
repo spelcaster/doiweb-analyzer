@@ -15,5 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(DOICodeTipoTransacaoSeeder::class);
         $this->command->info('DOICodeTipoTransacaoSeeder loaded!');
+        
+        $this->call(DOICodeAreaImovelSeeder::class);
+        $this->command->info('DOICodeAreaImovelSeeder loaded!');
     }
 }
