@@ -1,0 +1,25 @@
+{
+    "name": "spelcaster/doiweb-analyzer",
+    "description": "A simple DOI file generator and extractor",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hugo Augusto Freitas do Carmo",
+            "email": "hugrito.kun@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "DOIWeb\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0",
+        "your-app-rocks/eloquent-uuid": "^2.0",
+        "illuminate/database": "~5.8",
+        "czim/laravel-repository": "~1.4"
+    }
+}
