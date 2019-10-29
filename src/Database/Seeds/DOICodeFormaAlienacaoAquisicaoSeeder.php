@@ -5,7 +5,7 @@ namespace DOIWeb\Database\Seeds;
 use Illuminate\Database\Seeder;
 use DOIWeb\Models\DOICodeFormaAlienacaoAquisicao;
 
-class DoiWebCodeFormaAlienacaoAquisicaoSeeder extends Seeder
+class DOICodeFormaAlienacaoAquisicaoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
