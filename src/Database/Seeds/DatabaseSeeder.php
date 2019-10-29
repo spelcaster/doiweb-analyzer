@@ -37,5 +37,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DOICodeLocalizacaoImovelSeeder::class);
         $this->command->info('DOICodeLocalizacaoImovelSeeder loaded!');
+
+        $this->call(DOICodeSituacaoConstrucaoSeeder::class);
+        $this->command->info('DOICodeSituacaoConstrucaoSeeder loaded!');
     }
 }
