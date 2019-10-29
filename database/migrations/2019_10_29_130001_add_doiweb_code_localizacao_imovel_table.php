@@ -13,7 +13,7 @@ class AddDoiwebCodeLocalizacaoImovelTable extends Migration
      */
     public function up()
     {
-        Schema::table('doiweb_code_localizacao_imovel', function (Blueprint $table) {
+        Schema::create('doiweb_code_localizacao_imovel', function (Blueprint $table) {
             $table->uuid('id')
                 ->index();
             $table->unsignedInteger('code');

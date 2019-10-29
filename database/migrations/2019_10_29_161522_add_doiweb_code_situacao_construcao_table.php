@@ -13,7 +13,7 @@ class AddDoiwebCodeSituacaoConstrucaoTable extends Migration
      */
     public function up()
     {
-        Schema::table('doiweb_code_situacao_construcao', function (Blueprint $table) {
+        Schema::create('doiweb_code_situacao_construcao', function (Blueprint $table) {
             $table->uuid('id')
                 ->index();
             $table->unsignedInteger('code');
