@@ -3,7 +3,7 @@
 namespace DOIWeb\Database\Seeds;
 
 use Illuminate\Database\Seeder;
-use DOIWeb\Models\DOICodeValorItbiItcd;
+use DOIWeb\Models\DOICodeSituacaoConstrucao;
 
 class DOICodeSituacaoConstrucaoSeeder extends Seeder
 {
@@ -14,21 +14,21 @@ class DOICodeSituacaoConstrucaoSeeder extends Seeder
      */
     public function run()
     {
-        DOICodeValorItbiItcd::firstOrCreate(
+        DOICodeSituacaoConstrucao::firstOrCreate(
             [
                 "code" => "0",
                 "value" => "Construção Averbada"
             ]
         );
 
-        DOICodeValorItbiItcd::firstOrCreate(
+        DOICodeSituacaoConstrucao::firstOrCreate(
             [
                 "code" => "1",
                 "value" => "Em Construção"
             ]
         );
 
-        DOICodeValorItbiItcd::firstOrCreate(
+        DOICodeSituacaoConstrucao::firstOrCreate(
             [
                 "code" => "2",
                 "value" => "Não se Aplica"
