@@ -4,7 +4,7 @@ namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DOICodeAtribuicaoServentia extends UuidModelAbstract
+class DOICodeAtribuicaoServentia extends UuidModelAbstract implements HasFieldInterface
 {
     use SoftDeletes;
 
