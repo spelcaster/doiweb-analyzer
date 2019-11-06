@@ -2,11 +2,15 @@
 
 namespace DOIWeb\Fields;
 
+use DOIWeb\Models\DOICodeTipoImovel;
+
 /**
  * Class TipoImovel
  * @author yourname
  */
-class TipoImovel extends FieldAbstract implements SettableValueInterface
+class TipoImovel
+    extends FieldAbstract
+    implements SettableValueInterface, HasCodeInterface
 {
     protected $startPosition = 141;
     protected $length = 2;
@@ -17,5 +21,11 @@ class TipoImovel extends FieldAbstract implements SettableValueInterface
         $this->value = $value;
 
         return $this;
+    }
+
+    public function getCode()
+    {
+        return DOICodeTipoImovel::where('code', $this->value)
+            ->first();
     }
 }

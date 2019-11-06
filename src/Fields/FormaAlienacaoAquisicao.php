@@ -2,11 +2,15 @@
 
 namespace DOIWeb\Fields;
 
+use DOIWeb\Models\DOICodeFormaAlienacaoAquisicao;
+
 /**
  * Class FormaAlienacaoAquisicao
  * @author yourname
  */
-class FormaAlienacaoAquisicao extends FieldAbstract implements SettableValueInterface
+class FormaAlienacaoAquisicao
+    extends FieldAbstract
+    implements SettableValueInterface, HasCodeInterface
 {
     protected $startPosition = 109;
     protected $length = 1;
@@ -17,5 +21,11 @@ class FormaAlienacaoAquisicao extends FieldAbstract implements SettableValueInte
         $this->value = $value;
 
         return $this;
+    }
+
+    public function getCode()
+    {
+        return DOICodeFormaAlienacaoAquisicao::where('code', $this->value)
+            ->first();
     }
 }
