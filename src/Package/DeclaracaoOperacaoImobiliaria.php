@@ -15,12 +15,6 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
     protected $operacoes = [];
     protected $controle;
 
-    public function isValidDOI($regCounter)
-    {
-        // check $regCounter with controle['campo_controle']
-        return true;
-    }
-
     public function getOperacoes()
     {
         return $this->operacoes;

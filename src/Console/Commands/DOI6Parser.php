@@ -144,8 +144,10 @@ class DOI6Parser extends Command
 
         fclose($handle);
 
-        if (!$doi->isValidDOI($regCount)) {
-            throw new RuntimeException("Invalid DOI file '{$filepath}'");
+        if ($doi->getControle()->campo_controle != $regCount) {
+            throw new RuntimeException(
+                "Invalid DOI file '{$filepath}' expected #{$doi->getControle()->campo_controle} registers but found #{$regCount}"
+            );
         }
     }
 }
