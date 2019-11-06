@@ -8,6 +8,7 @@ use DOIWeb\Parser\AdquirenteParser;
 use DOIWeb\Parser\AlienanteParser;
 use DOIWeb\Parser\ControleParser;
 use DOIWeb\Package\DeclaracaoOperacaoImobiliaria;
+use RuntimeException;
 
 class DOI6Parser extends Command
 {
@@ -29,6 +30,16 @@ class DOI6Parser extends Command
     protected $alienanteParser;
     protected $adquirenteParser;
     protected $controleParser;
+
+    /**
+     * Buffer Size
+     */
+    const BUFFER_SIZE = 512;
+
+    /**
+     * Register Payload
+     */
+    const REGISTER_PAYLOAD = 367;
 
     /**
      * Create a new command instance.
@@ -78,10 +89,14 @@ class DOI6Parser extends Command
         $regCount = 0;
 
         while (!feof($handle)) {
-            $line = trim(stream_get_line($handle, 367, "\r\n"));
+            $line = fgets($handle, self::BUFFER_SIZE);
 
             if (!$line) {
                 continue;
+            } else if (strlen($line) != self::REGISTER_PAYLOAD) {
+                throw new RuntimeException(
+                    "Wrong register payload in line #{$regCount} '{$line}'"
+                );
             }
 
             $type = substr($line, 0, 1);
@@ -102,6 +117,7 @@ class DOI6Parser extends Command
                 $doi->pushAlienante(
                     $currentOperation, $this->alienanteParser->parseDOI6($line)
                 );
+
                 break;
 
             case '3':
@@ -110,16 +126,18 @@ class DOI6Parser extends Command
                 $doi->pushAdquirente(
                     $currentOperation, $this->adquirenteParser->parseDOI6($line)
                 );
+
                 break;
 
             case '9':
                 $regCount++;
 
                 $doi->setControle($this->controleParser->parseDOI6($line));
+
                 break;
 
             default:
-                throw new \Exception("Invalid register type '$type' in DOI file");
+                throw new RuntimeException("Invalid register type '$type' in DOI file");
                 break;
             }
         }
@@ -127,7 +145,7 @@ class DOI6Parser extends Command
         fclose($handle);
 
         if (!$doi->isValidDOI($regCount)) {
-            throw new \Exception("Invalid DOI file '{$filepath}'");
+            throw new RuntimeException("Invalid DOI file '{$filepath}'");
         }
     }
 }
