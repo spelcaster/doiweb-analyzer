@@ -48,6 +48,14 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     {
         $this->fields[$field->getStartPosition()] = $field;
 
+        if ($field instanceof \DOIWeb\Fields\HasCodeInterface) {
+            $code = $field->getCode();
+
+            if ($code) {
+                $this->addCode($field, $code);
+            }
+        }
+
         return $this;
     }
 
@@ -56,17 +64,24 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
         return $this->codes;
     }
 
-    public function pushCode($codeModel)
+    public function pushCode($code)
     {
-        $this->pushField($codeModel->field);
+        $field = $codeModel->field;
 
-        if (!isset($this->codes[$codeModel->field->getKey()])) {
-            $this->codes[$codeModel->field->getKey()] = [];
-        }
+        $this->pushField($field);
 
-        $this->codes[$codeModel->field->getKey()][] = $codeModel;
+        $this->addCode($field, $code);
 
         return $this;
+    }
+
+    protected function addCode(FieldAbstract $field, $code)
+    {
+        if (!isset($this->codes[$field->getKey()])) {
+            $this->codes[$field->getKey()] = [];
+        }
+
+        $this->codes[$field->getKey()][] = $code;
     }
 
     public function getMisc()
@@ -74,9 +89,13 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
         return $this->misc;
     }
 
-    public function pushMisc($key, array $data)
+    public function pushMisc($key, $data)
     {
-        $this->misc[$key] = $data;
+        if (!isset($this->misc[$key])) {
+            $this->misc[$key] = [];
+        }
+
+        $this->misc[$key][] = $data;
 
         return $this;
     }
