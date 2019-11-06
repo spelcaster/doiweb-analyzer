@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\ConstaArea;
 
 class DOICodeAreaImovel extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeAreaImovel extends UuidModelAbstract implements HasFieldInterface
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new ConstaArea();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }

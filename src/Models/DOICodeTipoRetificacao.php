@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\RetificacaoAto;
 
 class DOICodeTipoRetificacao extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeTipoRetificacao extends UuidModelAbstract implements HasFieldInterf
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new RetificacaoAto();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }
