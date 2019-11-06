@@ -83,13 +83,11 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
 
     public function jsonSerialize()
     {
-        return array_merge(
-            [
-                'codes' => $this->getCodes(),
-                'misc' => $this->getMisc(),
-            ],
-            $this->getFields()
-        );
+        return [
+            'codes' => $this->getCodes(),
+            'misc' => $this->getMisc(),
+            'fields' => $this->getFields(),
+        ];
     }
 
     public function serializeDOI6($validateChecksum)
@@ -100,7 +98,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
             $line .= $field->getPadValue();
         }
 
-        if ($validateChecksum) {
+        if ($validateChecksum && $this->getChecksum()) {
             $checksum = md5($line);
 
             if ($this->getChecksum() != $checksum) {
