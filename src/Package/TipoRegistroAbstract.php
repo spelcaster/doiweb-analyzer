@@ -98,7 +98,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
             $line .= $field->getPadValue();
         }
 
-        if ($validateChecksum) {
+        if ($validateChecksum && $this->getChecksum()) {
             $checksum = md5($line);
 
             if ($this->getChecksum() != $checksum) {
