@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\SituacaoConstrucao;
 
 class DOICodeSituacaoConstrucao extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeSituacaoConstrucao extends UuidModelAbstract implements HasFieldInt
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new SituacaoConstrucao();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }

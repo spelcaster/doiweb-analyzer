@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\Localizacao;
 
 class DOICodeLocalizacaoImovel extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeLocalizacaoImovel extends UuidModelAbstract implements HasFieldInte
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new Localizacao();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }

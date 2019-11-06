@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\ConstaITBI;
 
 class DOICodeValorItbiItcd extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeValorItbiItcd extends UuidModelAbstract implements HasFieldInterfac
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new ConstaITBI();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }

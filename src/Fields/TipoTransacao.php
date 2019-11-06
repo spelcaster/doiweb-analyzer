@@ -2,11 +2,15 @@
 
 namespace DOIWeb\Fields;
 
+use DOIWeb\Models\DOICodeTipoTransacao;
+
 /**
  * Class TipoTransacao
  * @author yourname
  */
-class TipoTransacao extends FieldAbstract implements SettableValueInterface
+class TipoTransacao
+    extends FieldAbstract
+    implements SettableValueInterface, HasCodeInterface
 {
     protected $startPosition = 66;
     protected $length = 2;
@@ -17,5 +21,11 @@ class TipoTransacao extends FieldAbstract implements SettableValueInterface
         $this->value = $value;
 
         return $this;
+    }
+
+    public function getCode()
+    {
+        return DOICodeTipoTransacao::where('code', $this->value)
+            ->first();
     }
 }

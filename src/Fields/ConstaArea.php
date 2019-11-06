@@ -2,11 +2,15 @@
 
 namespace DOIWeb\Fields;
 
+use DOIWeb\Models\DOICodeAreaImovel;
+
 /**
  * Class ConstaArea
  * @author yourname
  */
-class ConstaArea extends FieldAbstract implements SettableValueInterface
+class ConstaArea
+    extends FieldAbstract
+    implements SettableValueInterface, HasCodeInterface
 {
     protected $startPosition = 175;
     protected $length = 1;
@@ -17,5 +21,11 @@ class ConstaArea extends FieldAbstract implements SettableValueInterface
         $this->value = $value;
 
         return $this;
+    }
+
+    public function getCode()
+    {
+        return DOICodeAreaImovel::where('code', $this->value)
+            ->first();
     }
 }

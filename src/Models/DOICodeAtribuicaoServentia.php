@@ -3,6 +3,7 @@
 namespace DOIWeb\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DOIWeb\Fields\AtribuicaoServentia;
 
 class DOICodeAtribuicaoServentia extends UuidModelAbstract implements HasFieldInterface
 {
@@ -23,4 +24,17 @@ class DOICodeAtribuicaoServentia extends UuidModelAbstract implements HasFieldIn
     protected $fillable = [
         'code', 'value'
     ];
+
+    public $visible = ['value'];
+
+    public function getFieldAttribute()
+    {
+        if (!$this->id) {
+            return;
+        }
+
+        $obj = new AtribuicaoServentia();
+        $obj->setValue($this->code);
+        return $obj;
+    }
 }
