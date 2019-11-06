@@ -17,6 +17,15 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     protected $codes = [];
     protected $misc = [];
 
+    public function __get($key)
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getKey() == $key) {
+                return $field->getValue();
+            }
+        }
+    }
+
     public function getChecksum()
     {
         return $this->checksum;
