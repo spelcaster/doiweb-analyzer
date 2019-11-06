@@ -8,5 +8,5 @@ namespace DOIWeb\Compatibility;
  */
 interface DOI6Serializable
 {
-    public function serializeDOI6();
+    public function serializeDOI6($validateChecksum);
 }

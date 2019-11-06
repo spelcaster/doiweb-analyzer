@@ -5,6 +5,7 @@ namespace DOIWeb\Package;
 use DOIWeb\Compatibility\DOI6Serializable;
 use JsonSerializable;
 use DOIWeb\Fields\FieldAbstract;
+use RuntimeException;
 
 /**
  * Class TipoRegistroAbstract
@@ -91,12 +92,24 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
         );
     }
 
-    public function serializeDOI6()
+    public function serializeDOI6($validateChecksum)
     {
         $line = "";
 
         foreach ($this->getFields() as $field) {
             $line .= $field->getPadValue();
+        }
+
+        if ($validateChecksum) {
+            $checksum = md5($line);
+
+            if ($this->getChecksum() != $checksum) {
+                $data = json_encode($this);
+
+                throw new RuntimeException(
+                    "Invalid checksum for '$data' expected '{$this->getChecksum()}' found '{$checksum}'"
+                );
+            }
         }
 
         return $line;

@@ -79,24 +79,24 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
         ];
     }
 
-    public function serializeDOI6()
+    public function serializeDOI6($validateChecksum = false)
     {
         $doi = "";
 
         foreach ($this->getOperacoes() as $entry) {
             $operacao = $entry['operacao'];
-            $doi .= $operacao->serializeDOI6();
+            $doi .= $operacao->serializeDOI6($validateChecksum);
 
             foreach ($entry['alienantes'] as $alienante) {
-                $doi .= $alienante->serializeDOI6();
+                $doi .= $alienante->serializeDOI6($validateChecksum);
             }
 
             foreach ($entry['adquirentes'] as $adquirente) {
-                $doi .= $adquirente->serializeDOI6();
+                $doi .= $adquirente->serializeDOI6($validateChecksum);
             }
         }
 
-        $doi .= $this->getControle()->serializeDOI6();
+        $doi .= $this->getControle()->serializeDOI6($validateChecksum);
 
         return $doi;
     }
