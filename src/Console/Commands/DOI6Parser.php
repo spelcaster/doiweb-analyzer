@@ -149,5 +149,7 @@ class DOI6Parser extends Command
                 "Invalid DOI file '{$filepath}' expected #{$doi->getControle()->campo_controle} registers but found #{$regCount}"
             );
         }
+
+        print(json_encode($doi));
     }
 }
