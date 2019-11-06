@@ -3,6 +3,7 @@
 namespace DOIWeb\Package;
 
 use DOIWeb\Compatibility\DOI6Serializable;
+use DOIWeb\Fields\FieldFactory;
 use JsonSerializable;
 use RuntimeException;
 
@@ -93,5 +94,90 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
         $doi .= $this->getControle()->serializeDOI6($validateChecksum);
 
         return $doi;
+    }
+
+    public function fromJson($filepath)
+    {
+        if (!file_exists($filepath)) {
+            return false;
+        }
+
+        $data = json_decode(file_get_contents($filepath), true);
+
+        if (json_last_error()) {
+            return false;
+        } else if (!isset($data['operacoes']) && !isset($data['controle'])) {
+            return false;
+        }
+
+        foreach ($data['operacoes'] as $operacaoEntry) {
+            $currentPos = $this->pushOperacao(
+                $this->createOperacao($operacaoEntry['operacao'])
+            );
+
+            foreach ($operacaoEntry['alienantes'] as $entry) {
+                $this->pushAlienante($currentPos, $this->createAlienante($entry));
+            }
+
+            foreach ($operacaoEntry['adquirentes'] as $entry) {
+                $this->pushAdquirente($currentPos, $this->createAdquirente($entry));
+            }
+        }
+
+        $this->setControle($this->createControle($data['controle']));
+    }
+
+    protected function updateSection(TipoRegistroAbstract $section, array $fields)
+    {
+        foreach ($fields as $field) {
+            $key = key($field);
+            $value = $field[$key];
+
+            if (is_array($value)) {
+                $section->pushField(
+                    FieldFactory::create($key, ' ', $value['start_position'], $value['length'])
+                );
+
+                continue;
+            }
+
+            $section->pushField(FieldFactory::create($key, $value));
+        }
+    }
+
+    protected function createOperacao(array $data)
+    {
+        $section = new Operacao();
+
+        $this->updateSection($section, $data['fields']);
+
+        return $section;
+    }
+
+    protected function createAlienante(array $data)
+    {
+        $section = new Alienante();
+
+        $this->updateSection($section, $data['fields']);
+
+        return $section;
+    }
+
+    protected function createAdquirente(array $data)
+    {
+        $section = new Adquirente();
+
+        $this->updateSection($section, $data['fields']);
+
+        return $section;
+    }
+
+    protected function createControle(array $data)
+    {
+        $section = new Controle();
+
+        $this->updateSection($section, $data['fields']);
+
+        return $section;
     }
 }
