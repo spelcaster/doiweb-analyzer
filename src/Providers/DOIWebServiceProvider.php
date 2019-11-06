@@ -3,6 +3,7 @@
 namespace DOIWeb\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use DOIWeb\Console\Commands\DOI6Parser;
 
 class DOIWebServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,10 @@ class DOIWebServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                DOI6Parser::class,
+            ]);
+        }
     }
 }

@@ -14,12 +14,17 @@
     "autoload": {
         "psr-4": {
             "DOIWeb\\": "src/"
-        }
+        },
+        "files":[
+            "src/helpers.php"
+        ]
     },
     "require": {
         "php": ">=7.0",
         "your-app-rocks/eloquent-uuid": "^2.0",
         "illuminate/database": "~5.8",
-        "czim/laravel-repository": "~1.4"
+        "czim/laravel-repository": "~1.4",
+        "illuminate/console": "~5.8",
+        "ext-mbstring": "^7"
     }
 }
