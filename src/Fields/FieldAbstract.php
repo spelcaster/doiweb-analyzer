@@ -40,7 +40,6 @@ abstract class FieldAbstract implements JsonSerializable
         if (!$lengthDiff) {
             return $value;
         } else if ($lengthDiff < 0) {
-            dd($this->key, $this->length, strlen($value), $value);
             return substr($value, -1 * $this->length);
         }
 
