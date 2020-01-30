@@ -66,7 +66,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
 
     public function pushCode($code)
     {
-        $field = $codeModel->field;
+        $field = $code->field;
 
         $this->pushField($field);
 
