@@ -21,3 +21,7 @@ if (!function_exists('strcut')) {
         return iconv($encode, 'UTF-8', $word);
     }
 }
+
+function mb_str_pad ($input, $pad_length, $pad_string, $pad_style, $encoding="UTF-8") {
+   return str_pad($input, strlen($input)-mb_strlen($input,$encoding)+$pad_length, $pad_string, $pad_style);
+}

@@ -97,6 +97,16 @@ final class FieldFactory
         $fieldClass = self::$fieldMap[$key];
         $obj = new $fieldClass();
 
+        $encode = mb_detect_encoding($value, "ASCII, ISO-8859-1, UTF-8");
+
+        $tmpValue = $value;
+
+        if (!$encode) {
+            $value = utf8_encode($value);
+        } else if ($encode != 'UTF-8') {
+            $value = iconv($encode, 'UTF-8', $value);
+        }
+
         if ($obj instanceof \DOIWeb\Fields\SettableValueInterface) {
             $obj->setValue($value);
         }
