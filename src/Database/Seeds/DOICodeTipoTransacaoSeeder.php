@@ -146,5 +146,12 @@ class DOICodeTipoTransacaoSeeder extends Seeder
                 "value" => "Retorno de Capital próprio"
             ]
         );
+
+        DOICodeTipoTransacao::firstOrCreate(
+            [
+                "code" => "39",
+                "value" => "Outros"
+            ]
+        );
     }
 }
