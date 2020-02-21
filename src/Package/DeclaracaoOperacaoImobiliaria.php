@@ -15,6 +15,12 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 {
     protected $operacoes = [];
     protected $controle;
+    protected $currentPos = 0;
+
+    public function getCurrentPosition()
+    {
+        return $this->currentPos;
+    }
 
     public function getOperacoes()
     {
@@ -28,13 +34,15 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
     public function pushOperacao(Operacao $operacao)
     {
-        $currentPos = count($this->operacoes);
+        $this->currentPos = count($this->operacoes);
 
-        $this->operacoes[$currentPos]['operacao'] = $operacao;
-        $this->operacoes[$currentPos]['alienantes'] = [];
-        $this->operacoes[$currentPos]['adquirentes'] = [];
+        $this->operacoes[$this->currentPos]['operacao'] = $operacao;
+        $this->operacoes[$this->currentPos]['alienantes'] = [];
+        $this->operacoes[$this->currentPos]['adquirentes'] = [];
+        $this->operacoes[$this->currentPos]['status'] = false;
+        $this->operacoes[$this->currentPos]['alerts'] = [];
 
-        return $currentPos;
+        return $this->currentPos;
     }
 
     public function pushAlienante(int $operacao, Alienante $alienante)
@@ -61,9 +69,32 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
     public function setControle(Controle $controle)
     {
+        $this->validateOperacoes();
+
         $this->controle = $controle;
 
         return $this;
+    }
+
+    protected function validateOperacoes()
+    {
+        foreach ($this->operacoes as &$operacaoArr) {
+            $status = true;
+
+            $operacao = $operacaoArr['operacao'];
+
+            if (!$operacaoArr['alienantes']) {
+                $operacaoArr['alerts'][] = "Não foi informado nenhum alienante";
+                $status = false;
+            }
+
+            if (!$operacaoArr['adquirentes']) {
+                $operacaoArr['alerts'][] = "Não foi informado nenhum adquirente";
+                $status = false;
+            }
+
+            $operacaoArr['status'] = $status;
+        }
     }
 
     public function jsonSerialize()
