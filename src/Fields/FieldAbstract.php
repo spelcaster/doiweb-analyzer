@@ -33,13 +33,11 @@ abstract class FieldAbstract implements JsonSerializable
 
     public function getPadValue()
     {
-        $value = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $this->getValue());
+        $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $this->getValue());
 
         $lengthDiff = $this->length - (strlen($value) - 1); // without '\0'
 
-        if (!$lengthDiff) {
-            return $value;
-        } else if ($lengthDiff < 0) {
+        if ($lengthDiff <= 0) {
             return substr($value, -1 * $this->length);
         }
 
