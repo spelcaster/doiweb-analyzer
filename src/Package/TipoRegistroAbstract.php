@@ -79,11 +79,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
 
     protected function addCode(FieldAbstract $field, $code)
     {
-        if (!isset($this->codes[$field->getKey()])) {
-            $this->codes[$field->getKey()] = [];
-        }
-
-        $this->codes[$field->getKey()][] = $code;
+        $this->codes[$field->getKey()] = $code;
     }
 
     public function getMisc()
@@ -93,11 +89,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
 
     public function pushMisc($key, $data)
     {
-        if (!isset($this->misc[$key])) {
-            $this->misc[$key] = [];
-        }
-
-        $this->misc[$key][] = $data;
+        $this->misc[$key] = $data;
 
         return $this;
     }
