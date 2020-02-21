@@ -56,6 +56,8 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
             }
         }
 
+        ksort($this->fields);
+
         return $this;
     }
 
