@@ -8,7 +8,7 @@ namespace DOIWeb\Fields;
  */
 class BaseCalculoItbiItcd extends FieldAbstract implements SettableValueInterface
 {
-    protected $positionstart = 126;
+    protected $startPosition = 126;
     protected $length = 15;
     protected $key = 'base_calculo_itbi_itcd';
 
