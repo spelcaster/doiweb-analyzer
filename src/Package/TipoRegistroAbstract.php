@@ -17,6 +17,20 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     protected $fields = [];
     protected $codes = [];
     protected $misc = [];
+    protected $status = true;
+    protected $alerts = [];
+
+    abstract public function getRequiredFields();
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function getAlerts()
+    {
+        return $this->alerts;
+    }
 
     public function __get($key)
     {
@@ -46,6 +60,14 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
 
     public function pushField(FieldAbstract $field)
     {
+        if (!$this->isValid($field)) {
+            $this->status = false;
+
+            $this->alerts[] = <<<EOF
+O valor '{$field->getValue()}' não é válido para '{$field->getKey()}'
+EOF;
+        }
+
         $this->fields[$field->getStartPosition()] = $field;
 
         if ($field instanceof \DOIWeb\Fields\HasCodeInterface) {
@@ -59,6 +81,23 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
         ksort($this->fields);
 
         return $this;
+    }
+
+    public function isValid(FieldAbstract $field)
+    {
+        if (!in_array($field->getKey(), $this->getRequiredFields())) {
+            return true;
+        }
+
+        $value = $field->getValue();
+
+        if (is_numeric($value)) {
+            return true;
+        }
+
+        $value = trim($value);
+
+        return !empty($value) && !is_null($value);
     }
 
     public function getCodes()

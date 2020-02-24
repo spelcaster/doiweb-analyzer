@@ -38,7 +38,9 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
         $this->operacoes[$this->currentPos]['operacao'] = $operacao;
         $this->operacoes[$this->currentPos]['alienantes'] = [];
+        $this->operacoes[$this->currentPos]['participacao_alienante'] = 0.0;
         $this->operacoes[$this->currentPos]['adquirentes'] = [];
+        $this->operacoes[$this->currentPos]['participacao_adquirente'] = 0.0;
         $this->operacoes[$this->currentPos]['status'] = false;
         $this->operacoes[$this->currentPos]['alerts'] = [];
 
@@ -53,6 +55,9 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
         $this->operacoes[$operacao]['alienantes'][] = $alienante;
 
+        $value = $alienante->participacao ? str_replace(',', '.', $alienante->participacao) : 0.0;
+        $this->operacoes[$operacao]['participacao_alienante'] += $value;
+
         return $this;
     }
 
@@ -63,6 +68,9 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
         }
 
         $this->operacoes[$operacao]['adquirentes'][] = $adquirente;
+
+        $value = $adquirente->participacao ? str_replace(',', '.', $adquirente->participacao) : 0.0;
+        $this->operacoes[$operacao]['participacao_adquirente'] += $value;
 
         return $this;
     }
@@ -82,14 +90,31 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
             $status = true;
 
             $operacao = $operacaoArr['operacao'];
+            $totalAlienante = $operacaoArr['participacao_alienante'];
+            $totalAdquirente = $operacaoArr['participacao_adquirente'];
 
             if (!$operacaoArr['alienantes']) {
                 $operacaoArr['alerts'][] = "Não foi informado nenhum alienante";
+                $status = false;
+            } else if (($totalAlienante - 0.0005) < 0) {
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s)";
+                $status = false;
+            } else if ($totalAlienante > 100) {
+                $operacaoArr['alerts'][] = "Participação do(s) alienante(s) é maior que 100%";
                 $status = false;
             }
 
             if (!$operacaoArr['adquirentes']) {
                 $operacaoArr['alerts'][] = "Não foi informado nenhum adquirente";
+                $status = false;
+            } else if (($totalAdquirente - 0.0005) < 0) {
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s)";
+                $status = false;
+            } else if ($totalAdquirente > 100) {
+                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que 100%";
+                $status = false;
+            } else if ($totalAdquirente > $totalAlienante) {
+                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que a participação do(s) alienante(s)";
                 $status = false;
             }
 
