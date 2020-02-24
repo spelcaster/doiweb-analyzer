@@ -8,4 +8,12 @@ namespace DOIWeb\Package;
  */
 class Alienante extends TipoRegistroAbstract
 {
+    static protected $requiredFields = [
+        'participacao'
+    ];
+
+    public function getRequiredFields()
+    {
+        return self::$requiredFields;
+    }
 }

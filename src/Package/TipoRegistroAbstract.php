@@ -18,6 +18,8 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     protected $codes = [];
     protected $misc = [];
 
+    abstract public function getRequiredFields();
+
     public function __get($key)
     {
         foreach ($this->getFields() as $field) {
