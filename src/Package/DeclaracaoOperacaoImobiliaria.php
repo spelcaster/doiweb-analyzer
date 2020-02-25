@@ -108,7 +108,7 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
                 $operacaoArr['alerts'][] = "Não foi informado nenhum adquirente";
                 $status = false;
             } else if (($totalAdquirente - 0.0005) < 0) {
-                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s)";
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) adquirentes(s)";
                 $status = false;
             } else if ($totalAdquirente > 100) {
                 $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que 100%";
