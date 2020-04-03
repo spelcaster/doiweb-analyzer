@@ -32,6 +32,14 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
         return $this->alerts;
     }
 
+    public function pushAlert($alert)
+    {
+        $this->status = false;
+        $this->alerts[] = $alert;
+
+        return $this;
+    }
+
     public function __get($key)
     {
         foreach ($this->getFields() as $field) {
