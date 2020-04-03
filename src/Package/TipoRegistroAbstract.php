@@ -19,6 +19,7 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     protected $misc = [];
     protected $status = true;
     protected $alerts = [];
+    protected $warnings = [];
 
     abstract public function getRequiredFields();
 
@@ -36,6 +37,18 @@ abstract class TipoRegistroAbstract implements JsonSerializable, DOI6Serializabl
     {
         $this->status = false;
         $this->alerts[] = $alert;
+
+        return $this;
+    }
+
+    public function getWarnings()
+    {
+        return $this->warnings;
+    }
+
+    public function pushWarning($warning)
+    {
+        $this->warnings[] = $warning;
 
         return $this;
     }
