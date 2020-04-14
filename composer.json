@@ -22,9 +22,9 @@
     "require": {
         "php": ">=7.0",
         "your-app-rocks/eloquent-uuid": "^2.0",
-        "illuminate/database": "~5.8",
-        "czim/laravel-repository": "~1.4",
-        "illuminate/console": "~5.8",
+        "illuminate/database": "^6.0",
+        "czim/laravel-repository": "^2.0",
+        "illuminate/console": "^6.0",
         "ext-mbstring": "^7"
     }
 }
