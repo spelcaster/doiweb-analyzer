@@ -89,6 +89,8 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
         foreach ($this->operacoes as &$operacaoArr) {
             $status = true;
 
+            $epsilon = 0.0005;
+
             $operacao = $operacaoArr['operacao'];
             $totalAlienante = $operacaoArr['participacao_alienante'];
             $totalAdquirente = $operacaoArr['participacao_adquirente'];
@@ -96,25 +98,32 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
             if (!$operacaoArr['alienantes']) {
                 $operacaoArr['alerts'][] = "Não foi informado nenhum alienante";
                 $status = false;
-            } else if (($totalAlienante - 0.0005) < 0) {
-                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s)";
+            } else if (($totalAlienante - $epsilon) < 0) {
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s) (${totalAlienante}%)";
                 $status = false;
             } else if ($totalAlienante > 100) {
-                $operacaoArr['alerts'][] = "Participação do(s) alienante(s) é maior que 100%";
+                $operacaoArr['alerts'][] = "Participação do(s) alienante(s) (${totalAlienante}%) é maior que 100%";
                 $status = false;
             }
 
             if (!$operacaoArr['adquirentes']) {
                 $operacaoArr['alerts'][] = "Não foi informado nenhum adquirente";
                 $status = false;
-            } else if (($totalAdquirente - 0.0005) < 0) {
-                $operacaoArr['alerts'][] = "Possível falha na participação do(s) adquirente(s)";
+            } else if (($totalAdquirente - $epsilon) < 0) {
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) adquirente(s) (${totalAdquirente}%)";
                 $status = false;
             } else if ($totalAdquirente > 100) {
-                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que 100%";
+                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) (${totalAdquirente}%) é maior que 100%";
                 $status = false;
-            } else if ($totalAdquirente > $totalAlienante) {
-                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que a participação do(s) alienante(s)";
+            }
+
+            $totalDiff = $totalAlienante - $totalAdquirente;
+            if ($totalAdquirente > $totalAlienante) {
+                $totalDiff = $totalAdquirente - $totalAlienante;
+            }
+
+            if (($totalDiff - $epsilon) > 0) {
+                $operacaoArr['alerts'][] = "Participação de adquirente(s) (${totalAdquirente}%) e alienante(s) (${totalAlienante}%) são diferentes";
                 $status = false;
             }
 
