@@ -55,7 +55,7 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
         $this->operacoes[$operacao]['alienantes'][] = $alienante;
 
-        $value = $alienante->participacao ? str_replace(',', '.', $alienante->participacao) : 0.0;
+        $value = $alienante->participacao ? str_replace(',', '.', $alienante->participacao) : 0;
         $this->operacoes[$operacao]['participacao_alienante'] += $value;
 
         return $this;
@@ -69,7 +69,7 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
         $this->operacoes[$operacao]['adquirentes'][] = $adquirente;
 
-        $value = $adquirente->participacao ? str_replace(',', '.', $adquirente->participacao) : 0.0;
+        $value = $adquirente->participacao ? str_replace(',', '.', $adquirente->participacao) : 0;
         $this->operacoes[$operacao]['participacao_adquirente'] += $value;
 
         return $this;
@@ -86,10 +86,10 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
 
     protected function validateOperacoes()
     {
+        $epsilon = 0.0005;
+
         foreach ($this->operacoes as &$operacaoArr) {
             $status = true;
-
-            $epsilon = 0.0005;
 
             $operacao = $operacaoArr['operacao'];
             $totalAlienante = $operacaoArr['participacao_alienante'];
@@ -99,10 +99,10 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
                 $operacaoArr['alerts'][] = "Não foi informado nenhum alienante";
                 $status = false;
             } else if (($totalAlienante - $epsilon) < 0) {
-                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s) (${totalAlienante}%)";
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) alienante(s)";
                 $status = false;
-            } else if ($totalAlienante > 100) {
-                $operacaoArr['alerts'][] = "Participação do(s) alienante(s) (${totalAlienante}%) é maior que 100%";
+            } else if (round($totalAlienante) > 100) {
+                $operacaoArr['alerts'][] = "Participação do(s) alienante(s) é maior que 100% ({$totalAlienante})";
                 $status = false;
             }
 
@@ -110,17 +110,23 @@ class DeclaracaoOperacaoImobiliaria implements JsonSerializable, DOI6Serializabl
                 $operacaoArr['alerts'][] = "Não foi informado nenhum adquirente";
                 $status = false;
             } else if (($totalAdquirente - $epsilon) < 0) {
-                $operacaoArr['alerts'][] = "Possível falha na participação do(s) adquirente(s) (${totalAdquirente}%)";
+                $operacaoArr['alerts'][] = "Possível falha na participação do(s) adquirente(s)";
                 $status = false;
-            } else if ($totalAdquirente > 100) {
-                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) (${totalAdquirente}%) é maior que 100%";
+            } else if (round($totalAdquirente) > 100) {
+                $operacaoArr['alerts'][] = "Participação do(s) adquirente(s) é maior que 100% ({$totalAdquirente})";
                 $status = false;
             }
 
-            $totalDiff = $totalAlienante - $totalAdquirente;
-            if ($totalAdquirente > $totalAlienante) {
-                $totalDiff = $totalAdquirente - $totalAlienante;
+            $a = $totalAdquirente;
+            $b = $totalAlienante;
+
+            if ($a > $b) {
+                $t = $b;
+                $b = $a;
+                $a = $t;
             }
+
+            $totalDiff = $b - $a;
 
             if (($totalDiff - $epsilon) > 0) {
                 $operacaoArr['alerts'][] = "Participação de adquirente(s) (${totalAdquirente}%) e alienante(s) (${totalAlienante}%) são diferentes";
